@@ -65,6 +65,8 @@ services:
       REDIS_TLS_KEY: ${REDIS_TLS_KEY:-/certs/redis.key}
       EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS:-}
       SMTP_CONNECTION_URL: ${SMTP_CONNECTION_URL:-}
+    networks: # <-- ADD THIS
+      - langfuse-net # <-- ADD THIS
 
   langfuse-web:
     image: docker.io/langfuse/langfuse:3
@@ -84,6 +86,8 @@ services:
       LANGFUSE_INIT_USER_EMAIL: ${LANGFUSE_INIT_USER_EMAIL:-}
       LANGFUSE_INIT_USER_NAME: ${LANGFUSE_INIT_USER_NAME:-}
       LANGFUSE_INIT_USER_PASSWORD: ${LANGFUSE_INIT_USER_PASSWORD:-}
+    networks: # <-- ADD THIS
+      - langfuse-net # <-- ADD THIS
 
   clickhouse:
     image: docker.io/clickhouse/clickhouse-server
@@ -105,6 +109,8 @@ services:
       timeout: 5s
       retries: 10
       start_period: 1s
+    networks: # <-- ADD THIS
+      - langfuse-net # <-- ADD THIS
 
   minio:
     image: docker.io/minio/minio
@@ -126,6 +132,8 @@ services:
       timeout: 5s
       retries: 5
       start_period: 1s
+    networks: # <-- ADD THIS
+      - langfuse-net # <-- ADD THIS
 
   redis:
     image: docker.io/redis:7
@@ -140,6 +148,8 @@ services:
       interval: 3s
       timeout: 10s
       retries: 10
+    networks: # <-- ADD THIS
+      - langfuse-net # <-- ADD THIS
 
   postgres:
     image: docker.io/postgres:${POSTGRES_VERSION:-17}
@@ -159,6 +169,8 @@ services:
       - 127.0.0.1:5433:5432
     volumes:
       - langfuse_postgres_data:/var/lib/postgresql/data
+    networks: # <-- ADD THIS
+      - langfuse-net # <-- ADD THIS
 
 volumes:
   langfuse_postgres_data:
@@ -169,3 +181,8 @@ volumes:
     driver: local
   langfuse_minio_data:
     driver: local
+
+# vvv ADD THIS ENTIRE BLOCK AT THE END vvv
+networks:
+  langfuse-net:
+    driver: bridge
